@@ -1,41 +1,49 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import Card from './card';
 import AddForm from './add-form';
 
-import {addCard} from '../actions';
+import { addCard, deleteCard } from '../actions';
 
 export class List extends React.Component {
-    addCard(text) {
-        this.props.dispatch(addCard(text, this.props.index));
-    }
+  addCard(text) {
+    this.props.dispatch(addCard(text, this.props.index));
+  }
 
-    render() {
-        const cards = this.props.cards.map((card, index) =>
-            <li key={index}>
-                <Card {...card} />
-            </li>
-        );
-        return (
-            <div>
-                <h3>{this.props.title}</h3>
-                <ul className="list">
-                    {cards}
-                    <li>
-                        <AddForm
-                            type="card"
-                            onAdd={text => this.addCard(text)}
-                        />
-                    </li>
-                </ul>
-            </div>
-        );
+  handleDelete(event) {
+    if (window.confirm('Are you sure you want to delete this card?')) {
+      const cardIndex = parseInt(
+        event.target.parentElement.parentElement.id,
+        10
+      );
+      console.log('delete');
+      this.props.dispatch(deleteCard(this.props.index, cardIndex));
     }
+  }
+
+  render() {
+    const cards = this.props.cards.map((card, index) => (
+      <li id={index} key={index}>
+        <Card {...card} onClick={event => this.handleDelete(event)} />
+      </li>
+    ));
+    return (
+      <div>
+        <h3>{this.props.title}</h3>
+        <ul className="list">
+          {cards}
+          <li>
+            <AddForm type="card" onAdd={text => this.addCard(text)} />
+          </li>
+        </ul>
+      </div>
+    );
+  }
 }
 
 List.defaultProps = {
-    title: ''
+  title: ''
 };
 
 export default connect()(List);

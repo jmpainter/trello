@@ -1,37 +1,56 @@
 import * as actions from '../actions';
 
 const initialState = {
-    lists: []
+  boardLoaded: false,
+  lists: []
 };
 
-export const trelloReducer = (state=initialState, action) => {
-    if (action.type === actions.ADD_LIST) {
-        return Object.assign({}, state, {
-            lists: [...state.lists, {
-                title: action.title,
-                cards: []
-            }]
-        });
-    }
-    else if (action.type === actions.ADD_CARD) {
-        let lists = state.lists.map((list, index) => {
-            if (index !== action.listIndex) {
-                return list;
-            }
-            return Object.assign({}, list, {
-                cards: [...list.cards, {
-                    text: action.text
-                }]
-            });
-        });
+export const trelloReducer = (state = initialState, action) => {
+  if (action.type === actions.ADD_LIST) {
+    return Object.assign({}, state, {
+      lists: [
+        ...state.lists,
+        {
+          title: action.title,
+          cards: []
+        }
+      ]
+    });
+  } else if (action.type === actions.ADD_CARD) {
+    let lists = state.lists.map((list, index) => {
+      if (index !== action.listIndex) {
+        return list;
+      }
+      return Object.assign({}, list, {
+        cards: [
+          ...list.cards,
+          {
+            text: action.text
+          }
+        ]
+      });
+    });
 
-        return Object.assign({}, state, {
-            lists
-        });
+    return Object.assign({}, state, {
+      lists
+    });
+  } else if (action.type === actions.DELETE_CARD) {
+    const lists = state.lists.map((list, index) => {
+      if (index !== action.listIndex) {
+        return list;
+      }
+      const newCards = list.cards.filter((card, index) => {
+        return index !== action.cardIndex;
+      });
+      return Object.assign({}, list, { cards: newCards });
+    });
+    return Object.assign({}, state, {
+      lists
+    });
+  } else if (action.type === actions.FETCH_BOARD_SUCCESS) {
+    if (state.boardLoaded === false) {
+      return Object.assign({}, state, { boardLoaded: true }, action.board);
     }
-    else if (action.type === actions.FETCH_BOARD_SUCCESS) {
-        return action.board;
-    }
-    return state;
+  }
+  return state;
 };
-
