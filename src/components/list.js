@@ -31,6 +31,7 @@ export class List extends React.Component {
     return (
       <div>
         <h3>{this.props.title}</h3>
+        <button onClick={event => this.props.onClick(event)}>Delete</button>
         <ul className="list">
           {cards}
           <li>

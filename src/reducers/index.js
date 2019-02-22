@@ -1,7 +1,6 @@
 import * as actions from '../actions';
 
 const initialState = {
-  boardLoaded: false,
   lists: []
 };
 
@@ -16,6 +15,11 @@ export const trelloReducer = (state = initialState, action) => {
         }
       ]
     });
+  } else if (action.type === actions.DELETE_LIST) {
+    const newLists = state.lists.filter(
+      (list, index) => index !== action.listIndex
+    );
+    return Object.assign({}, state, { lists: newLists });
   } else if (action.type === actions.ADD_CARD) {
     let lists = state.lists.map((list, index) => {
       if (index !== action.listIndex) {
@@ -30,7 +34,6 @@ export const trelloReducer = (state = initialState, action) => {
         ]
       });
     });
-
     return Object.assign({}, state, {
       lists
     });
@@ -48,9 +51,7 @@ export const trelloReducer = (state = initialState, action) => {
       lists
     });
   } else if (action.type === actions.FETCH_BOARD_SUCCESS) {
-    if (state.boardLoaded === false) {
-      return Object.assign({}, state, { boardLoaded: true }, action.board);
-    }
+    return Object.assign({}, state, action.board);
   }
   return state;
 };

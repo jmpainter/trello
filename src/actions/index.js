@@ -4,6 +4,12 @@ export const addList = title => ({
   title
 });
 
+export const DELETE_LIST = 'DELETE_LIST';
+export const deleteList = listIndex => ({
+  type: DELETE_LIST,
+  listIndex
+});
+
 export const ADD_CARD = 'ADD_CARD';
 export const addCard = (text, listIndex) => ({
   type: ADD_CARD,

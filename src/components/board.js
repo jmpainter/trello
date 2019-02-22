@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import List from './list';
 import AddForm from './add-form';
 
-import { addList, fetchBoard } from '../actions';
+import { addList, deleteList, fetchBoard } from '../actions';
 
 import './board.css';
 
@@ -17,10 +17,22 @@ export class Board extends React.Component {
     this.props.dispatch(addList(title));
   }
 
+  handleDelete(event) {
+    if (window.confirm('Are you sure you want to delete this list?')) {
+      const listId = parseInt(event.target.parentElement.parentElement.id, 10);
+      this.props.dispatch(deleteList(listId));
+    }
+    console.log();
+  }
+
   render() {
     const lists = this.props.lists.map((list, index) => (
-      <li className="list-wrapper" key={index}>
-        <List index={index} {...list} />
+      <li id={index} className="list-wrapper" key={index}>
+        <List
+          index={index}
+          onClick={event => this.handleDelete(event)}
+          {...list}
+        />
       </li>
     ));
 
