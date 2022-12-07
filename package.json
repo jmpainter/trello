@@ -12,7 +12,7 @@
     "react-test-renderer": "^16.2.0"
   },
   "dependencies": {
-    "express": "^4.14.1",
+    "express": "^4.17.3",
     "mongoose": "^5.4.14",
     "npm-run-all": "^4.0.2",
     "react": "^16.2.0",
